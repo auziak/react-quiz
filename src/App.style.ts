@@ -1,5 +1,12 @@
 import styled, { createGlobalStyle } from "styled-components";
+// Images
 import BGImage from "./images/kids.jpg";
+import generalKnowledge from "./images/roll-safe.jpg";
+import mythology from "./images/herakles.jpg";
+import geography from "./images/geography.jpg";
+import history from "./images/history.jpg";
+import films from "./images/films.jpg";
+import music from "./images/music.jpg";
 // Styling Variables
 import { colors, shadow } from "./styled-variables";
 
@@ -11,6 +18,19 @@ const {
   questionDefaultFrom,
 } = colors;
 const { boxShadow } = shadow;
+const categoryRectSide = "200px";
+
+type Category = [number, string, null | string];
+
+export const categories: Category[] = [
+  [9, "general knowledge", generalKnowledge],
+  [20, "mythology", mythology],
+  [22, "geography", geography],
+  [23, "history", history],
+  [11, "films", films],
+  [12, "music", music],
+];
+const categoryImages = [music];
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -38,6 +58,7 @@ export const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 
   > p {
     color: fff;
@@ -88,16 +109,62 @@ export const AppWrapper = styled.div`
     margin-right: 1rem;
   }
 
-  .start,
+  .categories {
+    display: flex;
+    justify-content: space-around;
+    max-width: 800px;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+  .category {
+    min-height: ${categoryRectSide};
+    min-width: ${categoryRectSide};
+    height: ${categoryRectSide};
+    width: ${categoryRectSide};
+    margin: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    border-radius: 0.5rem;
+    border: solid #fff 2px;
+    box-shadow: ${boxShadow};
+    color: #fff;
+    text-shadow: 1px 1px 2px black;
+    font-size: 1.5rem;
+    word-break: normal;
+    text-align: center;
+    cursor: pointer;
+  }
+  .category:hover {
+    transform: scale(1.05);
+  }
+  ${categories.map((category) => {
+    return (
+      '.category[data-name="' +
+      category[1] +
+      '"] { background-image:url(' +
+      category[2] +
+      ");}"
+    );
+  })}
+
+  // buttons wrapper
+  .quizButtons {
+    display: flex;
+    justify-content: center;
+  }
+
+  // buttons
   .nextQuestion,
-  .chooseCategory {
+  .endQuiz {
     cursor: pointer;
     background: linear-gradient(180deg, #ffffff, ${menuButtons});
     border: 2px solid ${menuButtonsBorder};
     box-shadow: ${boxShadow};
     border-radius: 10px;
     height: 3rem;
-    margin: 16px 0;
+    margin: 1rem;
     padding: 0 40px;
     width: 220px;
   }

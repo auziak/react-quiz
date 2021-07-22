@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { fetchQuizQuestions } from "./API";
+import { categories } from "./App.style";
 // Components
 import QuestionCard from "./components/QuestionCard";
+import Loader from "./components/Loader";
 // Types
 import { Difficulty, QuestionState } from "./API";
 // Styles
@@ -85,15 +87,6 @@ const App = () => {
     if (!gameOver) setGameOver(true);
   };
 
-  type Category = [number, string];
-
-  const categories: Category[] = [
-    [9, "General knowledge"],
-    [20, "Mythology"],
-    [22, "Geography"],
-    [23, "History"],
-  ];
-
   const difficultyLevels: string[] = ["easy", "medium", "hard"];
 
   return (
@@ -118,25 +111,24 @@ const App = () => {
                 </>
               ))}
             </div>
-            {categories.map((category) => {
-              return (
-                <button
-                  className="start"
-                  onClick={() => startTrivia(category[0])}
-                >
-                  {category[1]}
-                </button>
-              );
-            })}
+            <div className="categories">
+              {categories.map((category) => {
+                return (
+                  <div
+                    className="category"
+                    key={category[1]}
+                    data-name={category[1]}
+                    onClick={() => startTrivia(category[0])}
+                  >
+                    {capitalize(category[1])}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
-        {!gameOver && (
-          <button className="chooseCategory" onClick={showCategories}>
-            Choose category
-          </button>
-        )}
         {!gameOver && <p className="score">Score: {score}</p>}
-        {loading && <p>Loadding Questions...</p>}
+        {loading && <Loader />}
         {!loading && !gameOver && (
           <QuestionCard
             questionNum={number + 1}
@@ -147,14 +139,21 @@ const App = () => {
             callback={checkAnswer}
           />
         )}
-        {!gameOver &&
-          !loading &&
-          userAnswers.length === number + 1 &&
-          number !== TOTAL_QUESTIONS - 1 && (
-            <button className="nextQuestion" onClick={nextQuestion}>
-              Next Question
+        <div className="quizButtons">
+          {!gameOver && (
+            <button className="endQuiz" onClick={showCategories}>
+              End trivia
             </button>
           )}
+          {!gameOver &&
+            !loading &&
+            userAnswers.length === number + 1 &&
+            number !== TOTAL_QUESTIONS - 1 && (
+              <button className="nextQuestion" onClick={nextQuestion}>
+                Next question
+              </button>
+            )}
+        </div>
       </AppWrapper>
     </>
   );
