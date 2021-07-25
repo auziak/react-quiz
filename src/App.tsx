@@ -29,6 +29,7 @@ const App = () => {
   const [difficulty, setDifficulty] = useState(
     localStorage.getItem("quizDifficultyLevel") || "medium"
   );
+  const [backgroundImageId, setBackgroundImageId] = useState(0);
 
   const startTrivia = async (categoryId: number) => {
     setLoading(true);
@@ -42,6 +43,7 @@ const App = () => {
         categoryId,
         Difficulty[difficulty.toUpperCase() as keyof typeof Difficulty]
       );
+      await setBackgroundImageId(categoryId);
     } catch (err) {
       console.log(err);
     }
@@ -83,15 +85,18 @@ const App = () => {
     setDifficulty(value);
   };
 
-  const showCategories = () => {
-    if (!gameOver) setGameOver(true);
+  const endTrivia = () => {
+    if (!gameOver) {
+      setGameOver(true);
+      setBackgroundImageId(0); // set default background image
+    }
   };
 
   const difficultyLevels: string[] = ["easy", "medium", "hard"];
 
   return (
     <>
-      <GlobalStyle />
+      <GlobalStyle backgroundImageId={backgroundImageId} />
       <AppWrapper className="App">
         <h1>Simple Trivia</h1>
         {gameOver && (
@@ -141,7 +146,7 @@ const App = () => {
         )}
         <div className="quizButtons">
           {!gameOver && (
-            <button className="endQuiz" onClick={showCategories}>
+            <button className="endQuiz" onClick={endTrivia}>
               End trivia
             </button>
           )}

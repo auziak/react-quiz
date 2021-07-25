@@ -1,11 +1,17 @@
 import styled, { createGlobalStyle } from "styled-components";
 // Images
 import BGImage from "./images/kids.jpg";
+import BGHistory from "./images/history-bg.jpg";
+import BGGeneralKnowledge from "./images/general-knowledge-bg.jpg";
+import BGMythology from "./images/mythology-bg.jpg";
+import BGGeography from "./images/geography-bg.jpg";
+import BGMovies from "./images/theater.jpg";
+import BGMusic from "./images/music-bg.jpg";
 import generalKnowledge from "./images/roll-safe.jpg";
 import mythology from "./images/herakles.jpg";
 import geography from "./images/geography.jpg";
 import history from "./images/history.jpg";
-import films from "./images/films.jpg";
+import movies from "./images/movies.jpg";
 import music from "./images/music.jpg";
 // Styling Variables
 import { colors, shadow } from "./styled-variables";
@@ -20,19 +26,19 @@ const {
 const { boxShadow } = shadow;
 const categoryRectSide = "200px";
 
-type Category = [number, string, null | string];
+type Category = [number, string, null | string, null | string];
 
+// category: id, name, image, background image
 export const categories: Category[] = [
-  [9, "general knowledge", generalKnowledge],
-  [20, "mythology", mythology],
-  [22, "geography", geography],
-  [23, "history", history],
-  [11, "films", films],
-  [12, "music", music],
+  [9, "general knowledge", generalKnowledge, BGGeneralKnowledge],
+  [20, "mythology", mythology, BGMythology],
+  [22, "geography", geography, BGGeography],
+  [23, "history", history, BGHistory],
+  [11, "movies", movies, BGMovies],
+  [12, "music", music, BGMusic],
 ];
-const categoryImages = [music];
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{ backgroundImageId: number }>`
 
   body {
     margin: 0;
@@ -41,7 +47,15 @@ export const GlobalStyle = createGlobalStyle`
   .App {
     display: flex;
     justify-content: center;
-    background-image: url(${BGImage});
+    background-image: url(
+      ${({ backgroundImageId }) => {
+        const categoryBG = categories.find(
+          (category) => backgroundImageId === category[0]
+        );
+        if (categoryBG && categoryBG.length) return categoryBG[3];
+        return BGImage;
+      }}
+    );
     background-size: cover;
     background-position: center;
     height: 100vh;

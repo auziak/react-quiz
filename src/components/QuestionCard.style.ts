@@ -40,6 +40,13 @@ export const QuestionCardWrapper = styled.div`
       "button button"
       "button button";
   }
+  .answers button {
+    height: 3rem;
+  }
+  .answers div {
+    width: 374px;
+    max-width: 374px;
+  }
 `;
 
 type ButtonWrapperProps = {
